@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Marvel.Characters.Infra.IoC.Context
+namespace Marvel.Characters.Infra.Data.Context
 {
     public class ApplicationDbContext : DbContext
     {
