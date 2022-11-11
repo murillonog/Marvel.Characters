@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marvel.Characters.Domain", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marvel.Characters.Infra.Data", "Marvel.Characters.Infra.Data\Marvel.Characters.Infra.Data.csproj", "{298B97F5-61B1-4D91-96B5-D3AC9DD4F502}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marvel.Characters.Infra.IoC", "Marvel.Characters.Infra.IoC\Marvel.Characters.Infra.IoC.csproj", "{9B59DE3E-713E-4EF4-B93C-61D1EAFEB4FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{298B97F5-61B1-4D91-96B5-D3AC9DD4F502}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{298B97F5-61B1-4D91-96B5-D3AC9DD4F502}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{298B97F5-61B1-4D91-96B5-D3AC9DD4F502}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B59DE3E-713E-4EF4-B93C-61D1EAFEB4FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B59DE3E-713E-4EF4-B93C-61D1EAFEB4FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B59DE3E-713E-4EF4-B93C-61D1EAFEB4FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B59DE3E-713E-4EF4-B93C-61D1EAFEB4FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
