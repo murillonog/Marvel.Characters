@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Marvel.Characters.Infra.IoC\Marvel.Characters.Infra.IoC.csproj" />
+  </ItemGroup>
+
 </Project>
