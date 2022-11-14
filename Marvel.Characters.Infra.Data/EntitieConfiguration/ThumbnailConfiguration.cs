@@ -1,6 +1,7 @@
 ﻿using Marvel.Characters.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +26,8 @@ namespace Marvel.Characters.Infra.Data.EntitieConfiguration
                     .IsUnicode(false);
 
             builder.HasOne(x => x.Character)
-                    .WithOne()
-                    .IsRequired();
+                    .WithOne(x => x.Thumbnail)
+                    .HasForeignKey<Thumbnail>(x => x.CharacterId);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Marvel.Characters.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Marvel.Characters.Infra.Data.Context
 {
