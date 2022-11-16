@@ -1,5 +1,4 @@
 ﻿using Marvel.Characters.Application.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Marvel.Characters.API.Controllers

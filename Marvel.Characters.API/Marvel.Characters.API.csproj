@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Marvel.Characters.Application\Marvel.Characters.Application.csproj" />
     <ProjectReference Include="..\Marvel.Characters.Infra.IoC\Marvel.Characters.Infra.IoC.csproj" />
   </ItemGroup>
 
