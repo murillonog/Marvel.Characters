@@ -16,10 +16,10 @@ namespace Marvel.Characters.Infra.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
-                    Description = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: true),
+                    Name = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "varchar(2000)", unicode: false, maxLength: 2000, nullable: false),
                     Modified = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
-                    ResourceURI = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
+                    ResourceURI = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
                     Favorite = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -33,8 +33,8 @@ namespace Marvel.Characters.Infra.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ResourceURI = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
-                    Name = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
+                    Name = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
+                    ResourceURI = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
                     CharacterId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -54,8 +54,8 @@ namespace Marvel.Characters.Infra.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ResourceURI = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
-                    Name = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
+                    Name = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
+                    ResourceURI = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
                     CharacterId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -75,8 +75,8 @@ namespace Marvel.Characters.Infra.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ResourceURI = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
-                    Name = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
+                    Name = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
+                    ResourceURI = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
                     CharacterId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -96,9 +96,9 @@ namespace Marvel.Characters.Infra.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ResourceURI = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
-                    Name = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
-                    Type = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
+                    Name = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
+                    ResourceURI = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
+                    Type = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     CharacterId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -118,8 +118,8 @@ namespace Marvel.Characters.Infra.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Path = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
-                    Extension = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
+                    Path = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
+                    Extension = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     CharacterId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -139,8 +139,8 @@ namespace Marvel.Characters.Infra.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
-                    URL = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
+                    URL = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
+                    Type = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     CharacterId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

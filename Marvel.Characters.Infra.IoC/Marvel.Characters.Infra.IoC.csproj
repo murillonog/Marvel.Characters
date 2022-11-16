@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Marvel.Characters.Application\Marvel.Characters.Application.csproj" />
     <ProjectReference Include="..\Marvel.Characters.Infra.Data\Marvel.Characters.Infra.Data.csproj" />
   </ItemGroup>
 

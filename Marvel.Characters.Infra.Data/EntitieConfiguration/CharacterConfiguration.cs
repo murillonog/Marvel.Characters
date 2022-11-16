@@ -17,7 +17,7 @@ namespace Marvel.Characters.Infra.Data.EntitieConfiguration
                     .IsUnicode(false);
 
             builder.Property(e => e.Description)
-                    .HasMaxLength(500)
+                    .HasMaxLength(2000)
                     .IsUnicode(false);
 
             builder.Property(e => e.Modified)

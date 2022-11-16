@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Marvel.Api" Version="0.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Marvel.Characters.Domain\Marvel.Characters.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

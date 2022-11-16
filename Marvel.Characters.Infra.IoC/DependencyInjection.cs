@@ -1,12 +1,11 @@
-﻿using Marvel.Characters.Infra.Data.Context;
+﻿using Marvel.Characters.Application.Interfaces;
+using Marvel.Characters.Application.Services;
+using Marvel.Characters.Domain.Interfaces;
+using Marvel.Characters.Infra.Data.Context;
+using Marvel.Characters.Infra.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Marvel.Characters.Infra.IoC
 {
@@ -14,9 +13,13 @@ namespace Marvel.Characters.Infra.IoC
     {
         public static IServiceCollection AddInfrastructureAPI(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationDbContext>(options => 
+            services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")
                 , b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+
+            services.AddScoped<ICharacterService, CharacterService>();
+
+            services.AddScoped<ICharacterRepository, CharacterRepository>();
 
             return services;
         }
