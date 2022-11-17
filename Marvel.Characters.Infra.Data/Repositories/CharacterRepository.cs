@@ -1,4 +1,5 @@
-﻿using Marvel.Characters.Domain.Entities;
+﻿using Dapper;
+using Marvel.Characters.Domain.Entities;
 using Marvel.Characters.Domain.Interfaces;
 using Marvel.Characters.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -23,9 +24,24 @@ namespace Marvel.Characters.Infra.Data.Repositories
             return result.Entity.Id;
         }
 
+        public async Task<IEnumerable<Character>> Get(string cmd, int page, int size)
+        {
+            var sql = $"SELECT * FROM Character {cmd}";
+
+            var list = await Db.Database.GetDbConnection()
+                .QueryAsync<Character>(sql);
+
+            return list.Skip(page * size).Take(size);
+        }
+
         public async Task<IEnumerable<Character>> GetAll()
         {
             return await DbSet.ToListAsync();
+        }
+
+        public async Task<int> GetTotalCharacters()
+        {
+            return await DbSet.CountAsync();
         }
 
         public async Task<Character> Update(Character obj)

@@ -5,7 +5,9 @@ namespace Marvel.Characters.Domain.Interfaces
     public interface ICharacterRepository
     {
         Task<IEnumerable<Character>> GetAll();
+        Task<int> GetTotalCharacters();
         Task<int> Add(Character character);
         Task<Character> Update(Character character);
+        Task<IEnumerable<Character>> Get(string cmd, int page, int size);
     }
 }

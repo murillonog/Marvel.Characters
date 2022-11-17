@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Marvel.Characters.Infra.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221116174853_Create Data Base")]
+    [Migration("20221117010706_Create Data Base")]
     partial class CreateDataBase
     {
         /// <inheritdoc />

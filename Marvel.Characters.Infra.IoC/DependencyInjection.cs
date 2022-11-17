@@ -1,4 +1,6 @@
-﻿using Marvel.Characters.Application.Interfaces;
+﻿using AutoMapper;
+using Marvel.Characters.Application.Interfaces;
+using Marvel.Characters.Application.Mappings;
 using Marvel.Characters.Application.Services;
 using Marvel.Characters.Domain.Interfaces;
 using Marvel.Characters.Infra.Data.Context;
@@ -20,6 +22,13 @@ namespace Marvel.Characters.Infra.IoC
             services.AddScoped<ICharacterService, CharacterService>();
 
             services.AddScoped<ICharacterRepository, CharacterRepository>();
+
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new DomainToDTOMappingProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             return services;
         }

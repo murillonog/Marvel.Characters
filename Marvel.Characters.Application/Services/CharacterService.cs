@@ -1,6 +1,8 @@
-﻿using Marvel.Api;
-using Marvel.Api.Filters;
+﻿using AutoMapper;
+using Marvel.Api;
 using Marvel.Api.Results;
+using Marvel.Characters.Application.Dtos;
+using Marvel.Characters.Application.Filters;
 using Marvel.Characters.Application.Interfaces;
 using Marvel.Characters.Domain.Entities;
 using Marvel.Characters.Domain.Interfaces;
@@ -13,10 +15,37 @@ namespace Marvel.Characters.Application.Services
         private readonly string privateKey = "1b3e05739f5487c29050c90c8aa0740f6532cddd";
         private readonly int limit = 100;
         private readonly ICharacterRepository _characterRepository;
+        private readonly IMapper _mapper;
 
-        public CharacterService(ICharacterRepository characterRepository)
+        public CharacterService(ICharacterRepository characterRepository, IMapper mapper)
         {
             _characterRepository = characterRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<CharacterResultDto> GetCharacters(CharacterRequestFilter filters)
+        {
+            try
+            {
+                string filterCmd = filters.GetClauseWhere();
+
+                var list = await _characterRepository.Get(filterCmd, filters.Page.Value, filters.Size.Value);
+                var total = await _characterRepository.GetTotalCharacters();
+
+                return new CharacterResultDto
+                {
+                    Page = filters.Page,
+                    Size = filters.Size,
+                    Total = total,
+                    Count = list.ToList().Count(),
+                    Results = _mapper.Map<List<Character>, List<CharacterDto>>(list.ToList())
+                };
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public async Task SyncDataBase()
@@ -28,7 +57,7 @@ namespace Marvel.Characters.Application.Services
                 if (!list.Any())
                 {
                     int count = 1;
-                    var options = new CharacterRequestFilter();
+                    var options = new Marvel.Api.Filters.CharacterRequestFilter();
                     options.Limit = limit;
                     var client = new MarvelRestClient(publicKey, privateKey);
                     var response = client.FindCharacters(options);
