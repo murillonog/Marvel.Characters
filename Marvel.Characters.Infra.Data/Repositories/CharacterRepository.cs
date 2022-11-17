@@ -24,6 +24,13 @@ namespace Marvel.Characters.Infra.Data.Repositories
             return result.Entity.Id;
         }
 
+        public async Task FavoriteCharacter(int id)
+        {
+            var sql = $"UPDATE Character SET Favorite = 1 WHERE Id = {id}";
+            await Db.Database.GetDbConnection()
+                .QueryAsync<Character>(sql);
+        }
+
         public async Task<IEnumerable<Character>> Get(string cmd, int page, int size)
         {
             var sql = $"SELECT * FROM Character {cmd}";
@@ -39,9 +46,26 @@ namespace Marvel.Characters.Infra.Data.Repositories
             return await DbSet.ToListAsync();
         }
 
+        public async Task<Character?> GetById(int id)
+        {
+            return await DbSet.FindAsync(id);
+        }
+
         public async Task<int> GetTotalCharacters()
         {
             return await DbSet.CountAsync();
+        }
+
+        public async Task<int> GetTotalFavorites()
+        {
+            return await DbSet.CountAsync(f => f.Favorite);
+        }
+
+        public async Task UnfavoriteCharacter(int id)
+        {
+            var sql = $"UPDATE Character SET Favorite = 0 WHERE Id = {id}";
+            await Db.Database.GetDbConnection()
+                .QueryAsync<Character>(sql);
         }
 
         public async Task<Character> Update(Character obj)

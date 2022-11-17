@@ -23,64 +23,69 @@ namespace Marvel.Characters.Application.Services
             _mapper = mapper;
         }
 
+        public async Task FavoriteCharacter(int id)
+        {
+            await _characterRepository.FavoriteCharacter(id);
+        }
+
+        public async Task<CharacterDto?> GetCharacterDetails(int id)
+        {
+            var result = await _characterRepository.GetById(id);
+            return _mapper.Map<CharacterDto>(result);
+        }
+
         public async Task<CharacterResultDto> GetCharacters(CharacterRequestFilter filters)
         {
-            try
+            string filterCmd = filters.GetClauseWhere();
+
+            var list = await _characterRepository.Get(filterCmd, filters.Page.Value, filters.Size.Value);
+            var total = await _characterRepository.GetTotalCharacters();
+
+            return new CharacterResultDto
             {
-                string filterCmd = filters.GetClauseWhere();
+                Page = filters.Page,
+                Size = filters.Size,
+                Total = total,
+                Count = list.ToList().Count(),
+                Results = _mapper.Map<List<Character>, List<CharacterDto>>(list.ToList())
+            };
+        }
 
-                var list = await _characterRepository.Get(filterCmd, filters.Page.Value, filters.Size.Value);
-                var total = await _characterRepository.GetTotalCharacters();
-
-                return new CharacterResultDto
-                {
-                    Page = filters.Page,
-                    Size = filters.Size,
-                    Total = total,
-                    Count = list.ToList().Count(),
-                    Results = _mapper.Map<List<Character>, List<CharacterDto>>(list.ToList())
-                };
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
+        public async Task<int> QuantityFavorite()
+        {
+            return await _characterRepository.GetTotalFavorites();
         }
 
         public async Task SyncDataBase()
         {
-            try
-            {
-                var list = await _characterRepository.GetAll();
+            var list = await _characterRepository.GetAll();
 
-                if (!list.Any())
+            if (!list.Any())
+            {
+                int count = 1;
+                var options = new Marvel.Api.Filters.CharacterRequestFilter();
+                options.Limit = limit;
+                var client = new MarvelRestClient(publicKey, privateKey);
+                var response = client.FindCharacters(options);
+
+                await SeedData(response);
+
+                var total = Convert.ToInt32(response.Data.Total);
+                int quantity = total / limit;
+                while (count <= quantity)
                 {
-                    int count = 1;
-                    var options = new Marvel.Api.Filters.CharacterRequestFilter();
-                    options.Limit = limit;
-                    var client = new MarvelRestClient(publicKey, privateKey);
-                    var response = client.FindCharacters(options);
-
+                    options.Offset = limit * count;
+                    response = client.FindCharacters(options);
                     await SeedData(response);
-
-                    var total = Convert.ToInt32(response.Data.Total);
-                    int quantity = total / limit;
-                    while (count <= quantity)
-                    {
-                        options.Offset = limit * count;
-                        response = client.FindCharacters(options);
-                        await SeedData(response);
-                        count++;
-                    }
-
+                    count++;
                 }
-            }
-            catch (Exception)
-            {
 
-                throw;
-            }            
+            }
+        }
+
+        public async Task UnfavoriteCharacter(int id)
+        {
+            await _characterRepository.UnfavoriteCharacter(id);
         }
 
         private async Task SeedData(CharacterResult response)

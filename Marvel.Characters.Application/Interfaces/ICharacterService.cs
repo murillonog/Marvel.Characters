@@ -7,5 +7,9 @@ namespace Marvel.Characters.Application.Interfaces
     {
         Task SyncDataBase();
         Task<CharacterResultDto> GetCharacters(CharacterRequestFilter filter);
+        Task<CharacterDto?> GetCharacterDetails(int id);
+        Task FavoriteCharacter(int id);
+        Task UnfavoriteCharacter(int id);
+        Task<int> QuantityFavorite();
     }
 }
