@@ -2,6 +2,10 @@
 {
     public class Comic
     {
+        public Comic()
+        {
+
+        }
         public Comic(string name, string resourceURI, int characterId)
         {
             Name = name;

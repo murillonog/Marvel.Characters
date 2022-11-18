@@ -2,6 +2,10 @@
 {
     public class Url
     {
+        public Url()
+        {
+
+        }
         public Url(string uRL, string type, int characterId)
         {
             URL = uRL;

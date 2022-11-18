@@ -1,6 +1,6 @@
 ﻿namespace Marvel.Characters.Application.Filters
 {
-    public class CharacterRequestFilter
+    public class CharacterFilter
     {
 
         public int? Page { get; set; } = 0;

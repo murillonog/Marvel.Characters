@@ -6,10 +6,10 @@ namespace Marvel.Characters.Application.Interfaces
     public interface ICharacterService
     {
         Task SyncDataBase();
-        Task<CharacterResultDto> GetCharacters(CharacterRequestFilter filter);
+        Task<CharacterResultDto> GetCharacters(CharacterFilter filter);
         Task<CharacterDto?> GetCharacterDetails(int id);
-        Task FavoriteCharacter(int id);
-        Task UnfavoriteCharacter(int id);
+        Task FavoriteCharacter(CharacterDto characterDto);
+        Task UnfavoriteCharacter(CharacterDto characterDto);
         Task<int> QuantityFavorite();
     }
 }

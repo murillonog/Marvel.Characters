@@ -11,7 +11,5 @@ namespace Marvel.Characters.Domain.Interfaces
         Task<Character> Update(Character character);
         Task<IEnumerable<Character>> Get(string cmd, int page, int size);
         Task<Character?> GetById(int id);
-        Task FavoriteCharacter(int id);
-        Task UnfavoriteCharacter(int id);
     }
 }

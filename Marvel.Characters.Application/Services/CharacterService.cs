@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Marvel.Api;
+using Marvel.Api.Filters;
 using Marvel.Api.Results;
 using Marvel.Characters.Application.Dtos;
 using Marvel.Characters.Application.Filters;
@@ -23,9 +24,11 @@ namespace Marvel.Characters.Application.Services
             _mapper = mapper;
         }
 
-        public async Task FavoriteCharacter(int id)
+        public async Task FavoriteCharacter(CharacterDto characterDto)
         {
-            await _characterRepository.FavoriteCharacter(id);
+            characterDto.Favorite = true;
+            var entity = _mapper.Map<Character>(characterDto);
+            await _characterRepository.Update(entity);
         }
 
         public async Task<CharacterDto?> GetCharacterDetails(int id)
@@ -34,7 +37,7 @@ namespace Marvel.Characters.Application.Services
             return _mapper.Map<CharacterDto>(result);
         }
 
-        public async Task<CharacterResultDto> GetCharacters(CharacterRequestFilter filters)
+        public async Task<CharacterResultDto> GetCharacters(CharacterFilter filters)
         {
             string filterCmd = filters.GetClauseWhere();
 
@@ -56,6 +59,13 @@ namespace Marvel.Characters.Application.Services
             return await _characterRepository.GetTotalFavorites();
         }
 
+        public async Task UnfavoriteCharacter(CharacterDto characterDto)
+        {
+            characterDto.Favorite = false;
+            var entity = _mapper.Map<Character>(characterDto);
+            await _characterRepository.Update(entity);
+        }
+
         public async Task SyncDataBase()
         {
             var list = await _characterRepository.GetAll();
@@ -63,7 +73,7 @@ namespace Marvel.Characters.Application.Services
             if (!list.Any())
             {
                 int count = 1;
-                var options = new Marvel.Api.Filters.CharacterRequestFilter();
+                var options = new CharacterRequestFilter();
                 options.Limit = limit;
                 var client = new MarvelRestClient(publicKey, privateKey);
                 var response = client.FindCharacters(options);
@@ -81,11 +91,6 @@ namespace Marvel.Characters.Application.Services
                 }
 
             }
-        }
-
-        public async Task UnfavoriteCharacter(int id)
-        {
-            await _characterRepository.UnfavoriteCharacter(id);
         }
 
         private async Task SeedData(CharacterResult response)

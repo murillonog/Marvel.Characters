@@ -30,7 +30,7 @@ namespace Marvel.Characters.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CharacterResultDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(List<string>))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(List<string>))]
-        public async Task<IActionResult> Get([FromQuery] CharacterRequestFilter filter)
+        public async Task<IActionResult> Get([FromQuery] CharacterFilter filter)
         {
             var list = await _characterService.GetCharacters(filter);
             return Ok(list);
@@ -56,9 +56,9 @@ namespace Marvel.Characters.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(List<string>))]
         public async Task<IActionResult> Favorite(int id)
         {
-            var result = await _characterService.GetCharacterDetails(id);
+            var character = await _characterService.GetCharacterDetails(id);
 
-            if (result is null)
+            if (character is null)
                 return NotFound();
 
             var total = await _characterService.QuantityFavorite();
@@ -66,7 +66,7 @@ namespace Marvel.Characters.API.Controllers
             if (total >= 5)
                 return BadRequest("Already 5 characters favorited");
 
-            await _characterService.FavoriteCharacter(id);
+            await _characterService.FavoriteCharacter(character);
 
             return Ok();
         }
@@ -77,14 +77,12 @@ namespace Marvel.Characters.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(List<string>))]
         public async Task<IActionResult> Unfavorite(int id)
         {
-            var result = await _characterService.GetCharacterDetails(id);
+            var character = await _characterService.GetCharacterDetails(id);
 
-            if (result is null)
-                return NotFound();
+            if (character is null)
+                return NotFound();            
 
-            
-
-            await _characterService.UnfavoriteCharacter(id);
+            await _characterService.UnfavoriteCharacter(character);
 
             return Ok();
         }
