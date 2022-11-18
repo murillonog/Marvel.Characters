@@ -5,7 +5,7 @@ namespace Marvel.Characters.Application.Interfaces
 {
     public interface ICharacterService
     {
-        Task SyncDataBase();
+        Task<string> SyncDataBase();
         Task<CharacterResultDto> GetCharacters(CharacterFilter filter);
         Task<CharacterDto?> GetCharacterDetails(int id);
         Task FavoriteCharacter(CharacterDto characterDto);

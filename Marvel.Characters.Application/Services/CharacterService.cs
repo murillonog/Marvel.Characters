@@ -3,10 +3,12 @@ using Marvel.Api;
 using Marvel.Api.Filters;
 using Marvel.Api.Results;
 using Marvel.Characters.Application.Dtos;
+using Marvel.Characters.Application.Exceptions;
 using Marvel.Characters.Application.Filters;
 using Marvel.Characters.Application.Interfaces;
 using Marvel.Characters.Domain.Entities;
 using Marvel.Characters.Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace Marvel.Characters.Application.Services
 {
@@ -17,6 +19,7 @@ namespace Marvel.Characters.Application.Services
         private readonly int limit = 100;
         private readonly ICharacterRepository _characterRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<CharacterService> _logger;
 
         public CharacterService(ICharacterRepository characterRepository, IMapper mapper)
         {
@@ -26,70 +29,124 @@ namespace Marvel.Characters.Application.Services
 
         public async Task FavoriteCharacter(CharacterDto characterDto)
         {
-            characterDto.Favorite = true;
-            var entity = _mapper.Map<Character>(characterDto);
-            await _characterRepository.Update(entity);
+            try
+            {
+                characterDto.Favorite = true;
+                var entity = _mapper.Map<Character>(characterDto);
+                await _characterRepository.Update(entity);
+
+            }
+            catch (Exception exception)
+            {
+                var errMsg = new ErrorMessage("01.01", "Unexpected error to favorite character.");
+                _logger.LogError(exception, HanddleError<object>.Handle(characterDto, exception, errMsg));
+                throw new ServiceException(errMsg.Code, errMsg.Message, exception);
+            }
         }
 
         public async Task<CharacterDto?> GetCharacterDetails(int id)
         {
-            var result = await _characterRepository.GetById(id);
-            return _mapper.Map<CharacterDto>(result);
+            try
+            {
+                var result = await _characterRepository.GetById(id);
+                return _mapper.Map<CharacterDto>(result);
+            }
+            catch (Exception exception)
+            {
+                var errMsg = new ErrorMessage("01.02", "Unexpected error to get character details.");
+                _logger.LogError(exception, HanddleError<object>.Handle(id, exception, errMsg));
+                throw new ServiceException(errMsg.Code, errMsg.Message, exception);
+            }
         }
 
         public async Task<CharacterResultDto> GetCharacters(CharacterFilter filters)
         {
-            string filterCmd = filters.GetClauseWhere();
-
-            var list = await _characterRepository.Get(filterCmd, filters.Page.Value, filters.Size.Value);
-            var total = await _characterRepository.GetTotalCharacters();
-
-            return new CharacterResultDto
+            try
             {
-                Page = filters.Page,
-                Size = filters.Size,
-                Total = total,
-                Count = list.ToList().Count(),
-                Results = _mapper.Map<List<Character>, List<CharacterDto>>(list.ToList())
-            };
+                var list = await _characterRepository.Get(filters.GetClauseWhere(), filters.Page.Value, filters.Size.Value);
+                var total = await _characterRepository.GetTotalCharacters();
+
+                return new CharacterResultDto
+                {
+                    Page = filters.Page,
+                    Size = filters.Size,
+                    Total = total,
+                    Count = list.ToList().Count(),
+                    Results = _mapper.Map<List<Character>, List<CharacterDto>>(list.ToList())
+                };
+            }
+            catch (Exception exception)
+            {
+                var errMsg = new ErrorMessage("01.03", "Unexpected error to get list characters.");
+                _logger.LogError(exception, HanddleError<object>.Handle(filters, exception, errMsg));
+                throw new ServiceException(errMsg.Code, errMsg.Message, exception);
+            }
         }
 
         public async Task<int> QuantityFavorite()
         {
-            return await _characterRepository.GetTotalFavorites();
+            try
+            {
+                return await _characterRepository.GetTotalFavorites();
+            }
+            catch (Exception exception)
+            {
+                var errMsg = new ErrorMessage("01.04", "Unexpected error to get total characters favorited.");
+                _logger.LogError(exception, HanddleError<object>.Handle(null, exception, errMsg));
+                throw new ServiceException(errMsg.Code, errMsg.Message, exception);
+            }
         }
 
         public async Task UnfavoriteCharacter(CharacterDto characterDto)
         {
-            characterDto.Favorite = false;
-            var entity = _mapper.Map<Character>(characterDto);
-            await _characterRepository.Update(entity);
+            try
+            {
+                characterDto.Favorite = false;
+                var entity = _mapper.Map<Character>(characterDto);
+                await _characterRepository.Update(entity);
+            }
+            catch (Exception exception)
+            {
+                var errMsg = new ErrorMessage("01.05", "Unexpected error to unfavorite character.");
+                _logger.LogError(exception, HanddleError<object>.Handle(characterDto, exception, errMsg));
+                throw new ServiceException(errMsg.Code, errMsg.Message, exception);
+            }
         }
 
-        public async Task SyncDataBase()
+        public async Task<string> SyncDataBase()
         {
-            var list = await _characterRepository.GetAll();
-
-            if (!list.Any())
+            try
             {
-                int count = 1;
-                var options = new CharacterRequestFilter();
-                options.Limit = limit;
-                var client = new MarvelRestClient(publicKey, privateKey);
-                var response = client.FindCharacters(options);
+                var list = await _characterRepository.GetAll();
 
-                await SeedData(response);
-
-                var total = Convert.ToInt32(response.Data.Total);
-                int quantity = total / limit;
-                while (count <= quantity)
+                if (!list.Any())
                 {
-                    options.Offset = limit * count;
-                    response = client.FindCharacters(options);
-                    await SeedData(response);
-                    count++;
-                }
+                    int count = 1;
+                    var options = new CharacterRequestFilter();
+                    options.Limit = limit;
+                    var client = new MarvelRestClient(publicKey, privateKey);
+                    var response = client.FindCharacters(options);
 
+                    await SeedData(response);
+
+                    var total = Convert.ToInt32(response.Data.Total);
+                    int quantity = total / limit;
+                    while (count <= quantity)
+                    {
+                        options.Offset = limit * count;
+                        response = client.FindCharacters(options);
+                        await SeedData(response);
+                        count++;
+                    }
+                    return "Database successfully synced!";
+                }
+                return "The database was previously synchronized!";
+            }
+            catch (Exception exception)
+            {
+                var errMsg = new ErrorMessage("01.06", "Unexpected error to sync database.");
+                _logger.LogError(exception, HanddleError<object>.Handle(null, exception, errMsg));
+                throw new ServiceException(errMsg.Code, errMsg.Message, exception);
             }
         }
 
