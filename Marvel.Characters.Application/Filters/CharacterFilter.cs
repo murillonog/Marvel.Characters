@@ -5,7 +5,6 @@
 
         public int? Page { get; set; } = 0;
         public int? Size { get; set; } = 10;
-        public string OrderBy { get; set; } = "Name";
         public string? Name { get; set; }
         public string? Description { get; set; }
         public DateTime? ModifiedSince { get; set; }
@@ -79,7 +78,7 @@
 
         private string OrderClause()
         {
-            return $" ORDER BY {OrderBy}";
+            return $" ORDER BY Favorite DESC, Name";
         }
     }
 }
